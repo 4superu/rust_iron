@@ -13,22 +13,31 @@ use hbs::{Template, HandlebarsEngine, DirectorySource};
 fn main() {
 
     fn top_handler(req: &mut Request) -> IronResult<Response> {
+
         let mut resp = Response::new();
         let mut data = HashMap::new();
+
         data.insert(String::from("greeting_path"),
                     format!("{}", url_for(req, "greeting", HashMap::new())));
+        
         resp.set_mut(Template::new("index", data)).set_mut(status::Ok);
         return Ok(resp);
     }
 
     fn greet_handler(req: &mut Request) -> IronResult<Response> {
+
         use params::{Params, Value};
+
         let map = req.get_ref::<Params>().unwrap();
+
         return match map.find(&["name"]) {
+
             Some(&Value::String(ref name)) => {
                 Ok(Response::with(
                     (status::Ok,
-                     format!("Hello {}", name).as_str())))
+                                         format!("Hello {}", name).as_str())
+                ))
+
             },
             _ => Ok(Response::with((status::Ok, "Hello world")))
         }
@@ -44,12 +53,14 @@ fn main() {
     // Add HandlerbarsEngine to middleware Chain
     let mut hbse = HandlebarsEngine::new();
     hbse.add(Box::new(
-        DirectorySource::new("./src/templates/", ".hbs")));
+        DirectorySource::new("./src/templates/", ".hbs")
+    ));
+
     if let Err(r) = hbse.reload() {
         panic!("{}", r.description());
     }
     chain.link_after(hbse);
 
-    println!("Listen on localhost:3000");
+    println!("[+] Listen on localhost:3000");
     Iron::new(chain).http("localhost:3000").unwrap();
 }
