@@ -19,7 +19,7 @@ fn main() {
 
         data.insert(String::from("greeting_path"),
                     format!("{}", url_for(req, "greeting", HashMap::new())));
-        
+
         resp.set_mut(Template::new("index", data)).set_mut(status::Ok);
         return Ok(resp);
     }
