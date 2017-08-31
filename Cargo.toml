@@ -1,0 +1,12 @@
+[package]
+name = "cpaw"
+version = "0.1.0"
+authors = ["4superu <aspr.gpa114514@gmail.com>"]
+
+[dependencies]
+router = "*"
+handlebars = "0.20.5"
+params = "0.4.1"
+
+[dependencies.iron]
+version = "*"
