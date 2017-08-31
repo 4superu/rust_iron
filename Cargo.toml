@@ -7,4 +7,4 @@ authors = ["4superu <aspr.gpa114514@gmail.com>"]
 iron = "*"
 router = "*"
 handlebars-iron = "*"
-params = "*"
+params = "0.6.0"
