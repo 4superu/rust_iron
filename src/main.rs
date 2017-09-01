@@ -17,15 +17,15 @@ fn main() {
 
     //Create Router
     let mut router = Router::new();
-    let top_handler = routes::top_handler;
-    let greet_handler = routes::greet_handler;
-    let blog_handler = blog::blog_handler;
-    let blog_generate_handler = blog::blog_generate_handler;
-
-    router.get("/", top_handler, "index");
-    router.post("/greet", greet_handler, "greeting");
-    router.get("/blog", blog_handler, "blog");
-    router.post("/blog",blog_generate_handler, "bloger");
+    //static_page_router
+    router.get("/", routes::top_handler, "index");
+    router.post("/greet", routes::greet_handler, "greeting");
+    //blog_router
+    router.get("/blog", blog::blog_handler, "blog");
+    router.get("/new_blog", blog::new_blog, "new_blog");
+    router.get("/edit_blog", blog::edit_blog, "edit_blog");
+    router.post("/register", blog::register, "register" );
+    router.post("/update", blog::update, "update");
 
     //Create Chain
     let mut chain = Chain::new(router);
