@@ -8,3 +8,7 @@ iron = "*"
 router = "*"
 handlebars-iron = "*"
 params = "0.6.0"
+
+[dependencies.rusqlite]
+version = "0.11.0"
+features = ["bundled"]
