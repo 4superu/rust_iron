@@ -2,54 +2,34 @@ extern crate iron;
 extern crate router;
 extern crate handlebars_iron as hbs;
 extern crate params;
+extern crate rusqlite;
 
-use std::collections::HashMap;
 use std::error::Error;
 use iron::prelude::*;
-use iron::status;
-use router::{Router, url_for};
-use hbs::{Template, HandlebarsEngine, DirectorySource};
+use router::{Router};
+use hbs::{HandlebarsEngine, DirectorySource};
+
+mod routes;
+mod blog;
+
 
 fn main() {
 
-    fn top_handler(req: &mut Request) -> IronResult<Response> {
-
-        let mut resp = Response::new();
-        let mut data = HashMap::new();
-
-        data.insert(String::from("greeting_path"),
-                    format!("{}", url_for(req, "greeting", HashMap::new())));
-        
-        resp.set_mut(Template::new("index", data)).set_mut(status::Ok);
-        return Ok(resp);
-    }
-
-    fn greet_handler(req: &mut Request) -> IronResult<Response> {
-
-        use params::{Params, Value};
-
-        let map = req.get_ref::<Params>().unwrap();
-
-        return match map.find(&["name"]) {
-
-            Some(&Value::String(ref name)) => {
-                Ok(Response::with(
-                    (status::Ok,
-                                         format!("Hello {}", name).as_str())
-                ))
-
-            },
-            _ => Ok(Response::with((status::Ok, "Hello world")))
-        }
-    }
-
     //Create Router
     let mut router = Router::new();
+    let top_handler = routes::top_handler;
+    let greet_handler = routes::greet_handler;
+    let blog_handler = blog::blog_handler;
+    let blog_generate_handler = blog::blog_generate_handler;
+
     router.get("/", top_handler, "index");
     router.post("/greet", greet_handler, "greeting");
+    router.get("/blog", blog_handler, "blog");
+    router.post("/blog",blog_generate_handler, "bloger");
 
     //Create Chain
     let mut chain = Chain::new(router);
+
     // Add HandlerbarsEngine to middleware Chain
     let mut hbse = HandlebarsEngine::new();
     hbse.add(Box::new(
