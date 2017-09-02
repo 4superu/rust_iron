@@ -10,6 +10,7 @@ use iron::status;
 use router::{url_for};
 use hbs::{Template};
 
+
 pub fn top_handler(req: &mut Request) -> IronResult<Response> {
     let mut resp = Response::new();
     let mut data = HashMap::new();
@@ -24,7 +25,6 @@ pub fn top_handler(req: &mut Request) -> IronResult<Response> {
 pub fn greet_handler(req: &mut Request) -> IronResult<Response> {
 
     use params::{Params, Value};
-
     let map = req.get_ref::<Params>().unwrap();
 
     return match map.find(&["name"]) {
