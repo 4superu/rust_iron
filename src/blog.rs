@@ -51,7 +51,7 @@ pub fn blog_handler(req: &mut Request) -> IronResult<Response> {
 
     data.insert(String::from("blog_path"),
                 format!("{}", url_for(req, "blog", HashMap::new())));
-    // data.insert(Vec::from("blog"), blog_list);
+    data.insert(Vec::from("blog"), blog_list);
 
     resp.set_mut(Template::new("blog", data)).set_mut(status::Ok);
 
@@ -154,7 +154,7 @@ pub fn update(req: &mut Request) -> IronResult<Response> {
         };
 
         conn.execute("UPDATE blog SET (title, author, body, time_posted, time_updated = datetime('now', 'localtime'))
-                        VALUES (?1, ?2, ?3 ?4)",
+                        VALUES (?1, ?2, ?3, ?4)",
                         &[&sentence.title, &sentence.author, &sentence.body, &sentence.time_posted]).unwrap();
     }
     let ref blog_url = url_for(req, "blog", HashMap::new());
